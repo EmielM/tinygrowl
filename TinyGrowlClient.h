@@ -1,8 +1,11 @@
-// Created by Satoshi Nakagawa.
-// You can redistribute it and/or modify it under the new BSD license.
+/*
+ * tinygrowl - http://github.com/EmielM/tinygrowl
+ * Copyright (c) 2010, Satoshi Nakagawa, Emiel Mols
+ *
+ * You can redistribute it and/or modify it under the new BSD license. 
+ */
 
 #import <Cocoa/Cocoa.h>
-
 
 @interface TinyGrowlClient : NSObject
 {
@@ -11,17 +14,29 @@
 	NSArray* allNotifications;
 	NSArray* defaultNotifications;
 	NSImage* appIcon;
-	
+
 	NSString* clickedNotificationName;
 	NSString* timedOutNotificationName;
 	NSTimeInterval lastCallbackTime;
+
+	bool lastRunning;
+	ProcessSerialNumber lastRunningPSN;
+	NSTimeInterval lastRunningCheck;
 }
 
-@property (nonatomic, assign) id delegate;
-@property (nonatomic, copy) NSString* appName;
-@property (nonatomic, retain) NSArray* allNotifications;
-@property (nonatomic, retain) NSArray* defaultNotifications;
-@property (nonatomic, retain) NSImage* appIcon;
+- (void)setDelegate:(id)value;
+- (void)setAppName:(NSString *)value;
+- (void)setAllNotifications:(NSArray *)value;
+- (void)setDefaultNotifications:(NSArray *)value;
+- (void)setAppIcon:(NSImage *)value;
+
+- (id)delegate;
+- (NSString *)appName;
+- (NSArray *)allNotifications;
+- (NSArray *)defaultNotifications;
+- (NSImage *)appIcon;
+
+- (bool)running;
 
 - (void)registerApplication;
 
@@ -54,4 +69,5 @@
 @interface NSObject (TinyGrowlClientDelegate)
 - (void)tinyGrowlClient:(TinyGrowlClient*)sender didClick:(id)context;
 - (void)tinyGrowlClient:(TinyGrowlClient*)sender didTimeOut:(id)context;
+- (void)tinyGrowlClient:(TinyGrowlClient*)sender didChangeRunning:(bool)running;
 @end
